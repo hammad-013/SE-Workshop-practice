@@ -156,24 +156,10 @@ void searchStudents() {
 }
 
 void sortRecords() {
-    // Replace this with your code:
-    // char type; std::cout << "Sort by GPA (g) or Roll (r)? "; std::cin >> type; std::cin.ignore();
-    // if (type == 'g') {
-    //     std::sort(students.begin(), students.end(), [](const Student& a, const Student& b){ return a.gpa > b.gpa; });
-    // } else if (type == 'r') {
-    //     std::sort(students.begin(), students.end(), [](const Student& a, const Student& b){ return a.rollNumber < b.rollNumber; });
-    // }
-    // std::cout << "Sorted by " << (type=='g' ? "GPA" : "Roll") << "!" << std::endl;
     std::cout << "[STUB - MEMBER 3] Sorted students." << std::endl;
 }
 
 void showMenu() {
-    // Replace this with your code:
-    // Make it pretty: std::cout << "=========================" << std::endl;
-    // << "Student Management System" << std::endl;
-    // << "=========================" << std::endl;
-    // Then list 1-7, 0. Exit.
-    // End with "=========================" << std::endl;
     std::cout << "\n=== Student Record Management ===" << std::endl;
     std::cout << "1. Add Student" << std::endl;
     std::cout << "2. View All" << std::endl;
@@ -195,7 +181,7 @@ int main() {
         showMenu();
         std::cout << "Enter your choice: ";
         std::cin >> choice;
-        std::cin.ignore();  // Clears leftover input for strings
+        std::cin.ignore(); 
 
         if (choice == 1) {
             addStudent();
@@ -222,7 +208,6 @@ int main() {
         }
     } while (choice != 0);
 
-    saveData();  // Save before exit
+    saveData(); 
     return 0;
 }
-// ===== END MAIN =====
