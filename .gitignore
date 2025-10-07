@@ -1,0 +1,14 @@
+# Build artifacts
+*.o
+*.exe
+*.out
+*.app
+student_mgr
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
