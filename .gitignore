@@ -4,6 +4,7 @@
 *.out
 *.app
 student_mgr
+student
 
 # IDE files
 .vscode/
