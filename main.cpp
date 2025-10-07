@@ -25,26 +25,44 @@ std::vector<Student> students;
 // Replace the code inside each function (keep the function name/line).
 
 void loadData() {
-    // Replace this with your code:
-    // 1. Open file: std::ifstream file("data/students.txt");
-    // 2. Skip first line (header): std::string line; std::getline(file, line);
-    // 3. For each line: Parse with std::stringstream ss(line);
-    //    Student s; std::getline(ss, s.name, ','); ... (for roll, dept, gpa: double, contact).
-    //    students.push_back(s);
-    // If file missing or empty: Do nothing (start empty).
-    // Handle errors: std::cout << "Load failed!" << std::endl;
-    std::cout << "[STUB - MEMBER 2] Loaded students from file." << std::endl;
+    std::ifstream file("data/students.txt");
+    if (!file.is_open()) {
+        return;  // File missing or empty, start empty
+    }
+    std::string line;
+    std::getline(file, line);  // Skip header
+    while (std::getline(file, line)) {
+        if (line.empty()) continue;
+        std::stringstream ss(line);
+        Student s;
+        std::getline(ss, s.name, ',');
+        std::getline(ss, s.rollNumber, ',');
+        std::getline(ss, s.department, ',');
+        std::string gpaStr;
+        std::getline(ss, gpaStr, ',');
+        try {
+            s.gpa = std::stod(gpaStr);
+        } catch (...) {
+            continue;  // Skip invalid GPA
+        }
+        std::getline(ss, s.contactInfo, ',');
+        students.push_back(s);
+    }
+    file.close();
 }
 
 void saveData() {
-    // Replace this with your code:
-    // 1. Open file: std::ofstream file("data/students.txt");
-    // 2. Write header: file << "Name,RollNumber,Department,GPA,Contact\n";
-    // 3. For each student: file << s.name << "," << s.rollNumber << "," << s.department << ","
-    //    << s.gpa << "," << s.contactInfo << "\n"; (escape commas in names if needed).
-    // If empty: Just write header.
-    // Handle errors: std::cout << "Save failed!" << std::endl;
-    std::cout << "[STUB - MEMBER 2] Saved students to file." << std::endl;
+    std::ofstream file("data/students.txt");
+    if (!file.is_open()) {
+        std::cout << "Save failed!" << std::endl;
+        return;
+    }
+    file << "Name,RollNumber,Department,GPA,Contact\n";
+    for (const auto& s : students) {
+        file << s.name << "," << s.rollNumber << "," << s.department << ","
+             << s.gpa << "," << s.contactInfo << "\n";
+    }
+    file.close();
 }
 
 // Helper: Don't edit—checks if roll is unique and not empty.
@@ -56,35 +74,52 @@ bool isValidRollNumber(const std::string& roll) {
 }
 
 void addStudent() {
-    // Replace this with your code:
-    // 1. Student s;
-    // 2. std::cout << "Enter name: "; std::getline(std::cin, s.name);
-    //    std::cout << "Enter roll number: "; std::getline(std::cin, s.rollNumber);
-    //    std::cout << "Enter department: "; std::getline(std::cin, s.department);
-    //    std::cout << "Enter GPA (0-4): "; std::cin >> s.gpa; std::cin.ignore();
-    //    std::cout << "Enter contact: "; std::getline(std::cin, s.contactInfo);
-    // 3. If (!isValidRollNumber(s.rollNumber)) { std::cout << "Roll must be unique!"; return; }
-    // 4. students.push_back(s); std::cout << "Student added!" << std::endl;
-    std::cout << "[STUB - MEMBER 2] Added a student." << std::endl;
+    Student s;
+    std::cout << "Enter name: "; std::getline(std::cin, s.name);
+    std::cout << "Enter roll number: "; std::getline(std::cin, s.rollNumber);
+    std::cout << "Enter department: "; std::getline(std::cin, s.department);
+    std::cout << "Enter GPA (0-4): "; std::cin >> s.gpa; std::cin.ignore();
+    std::cout << "Enter contact: "; std::getline(std::cin, s.contactInfo);
+    if (!isValidRollNumber(s.rollNumber)) {
+        std::cout << "Roll must be unique!" << std::endl;
+        return;
+    }
+    students.push_back(s);
+    std::cout << "Student added!" << std::endl;
 }
 
 void updateStudent() {
-    // Replace this with your code:
-    // 1. std::string roll; std::cout << "Enter roll to update: "; std::getline(std::cin, roll);
-    // 2. size_t i = 0; for (; i < students.size(); ++i) { if (students[i].rollNumber == roll) break; }
-    // 3. If (i == students.size()) { std::cout << "Not found!"; return; }
-    // 4. Ask for new name/gpa/etc. (skip roll), update students[i].field = newValue;
-    // 5. std::cout << "Updated!" << std::endl;
-    std::cout << "[STUB - MEMBER 2] Updated a student." << std::endl;
+    std::string roll;
+    std::cout << "Enter roll to update: "; std::getline(std::cin, roll);
+    size_t i = 0;
+    for (; i < students.size(); ++i) {
+        if (students[i].rollNumber == roll) break;
+    }
+    if (i == students.size()) {
+        std::cout << "Not found!" << std::endl;
+        return;
+    }
+    Student& s = students[i];
+    std::cout << "Enter new name: "; std::getline(std::cin, s.name);
+    std::cout << "Enter new department: "; std::getline(std::cin, s.department);
+    std::cout << "Enter new GPA (0-4): "; std::cin >> s.gpa; std::cin.ignore();
+    std::cout << "Enter new contact: "; std::getline(std::cin, s.contactInfo);
+    std::cout << "Updated!" << std::endl;
 }
 
 void deleteStudent() {
-    // Replace this with your code:
-    // 1. std::string roll; std::cout << "Enter roll to delete: "; std::getline(std::cin, roll);
-    // 2. size_t i = 0; for (; i < students.size(); ++i) { if (students[i].rollNumber == roll) break; }
-    // 3. If (i == students.size()) { std::cout << "Not found!"; return; }
-    // 4. students.erase(students.begin() + i); std::cout << "Deleted!" << std::endl;
-    std::cout << "[STUB - MEMBER 2] Deleted a student." << std::endl;
+    std::string roll;
+    std::cout << "Enter roll to delete: "; std::getline(std::cin, roll);
+    size_t i = 0;
+    for (; i < students.size(); ++i) {
+        if (students[i].rollNumber == roll) break;
+    }
+    if (i == students.size()) {
+        std::cout << "Not found!" << std::endl;
+        return;
+    }
+    students.erase(students.begin() + i);
+    std::cout << "Deleted!" << std::endl;
 }
 // ===== END MEMBER 2 =====
 
@@ -182,7 +217,8 @@ int main() {
         } else if (choice == 0) {
             std::cout << "Goodbye!" << std::endl;
         } else {
-            std::cout << "Invalid choice!";
+            std::cout << "Invalid choice !!!! >>>> try again." << std::endl;
+
         }
     } while (choice != 0);
 
