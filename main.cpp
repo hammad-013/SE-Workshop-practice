@@ -1,32 +1,26 @@
-#include <iostream>    // For input/output
-#include <string>      // For strings
-#include <vector>      // For list of students
-#include <fstream>     // For file reading/writing
-#include <sstream>     // For parsing CSV lines
-#include <algorithm>   // For sorting
-#include <iomanip>     // For table formatting (e.g., setw)
-// ===== SHARED: Student Data =====
-// Don't edit this—use it in your functions
+#include <iostream>   
+#include <string>      
+#include <vector>      
+#include <fstream>     
+#include <sstream>     
+#include <algorithm>   
+#include <iomanip>     
+
 struct Student {
     std::string name;
     std::string rollNumber;
     std::string department;
-    double gpa;          // 0.0 to 4.0
+    double gpa;        
     std::string contactInfo;
 };
-// Shared list of all students (add/remove here in your code)
 std::vector<Student> students;
-// ===== MEMBER 2: FILE HANDLING & CRUD (Save/Load + Add/Update/Delete) =====
-// Goal: Load from file on start, save on exit. Add/update/delete with validation.
-// Format: CSV in data/students.txt (e.g., "John,123,CS,3.5,john@email.com")
-// Replace the code inside each function (keep the function name/line).
 void loadData() {
     std::ifstream file("data/students.txt");
     if (!file.is_open()) {
-        return;  // File missing or empty, start empty
+        return;  
     }
     std::string line;
-    std::getline(file, line);  // Skip header
+    std::getline(file, line);  
     while (std::getline(file, line)) {
         if (line.empty()) continue;
         std::stringstream ss(line);
@@ -39,7 +33,7 @@ void loadData() {
         try {
             s.gpa = std::stod(gpaStr);
         } catch (...) {
-            continue;  // Skip invalid GPA
+            continue;  
         }
         std::getline(ss, s.contactInfo, ',');
         students.push_back(s);
@@ -59,7 +53,6 @@ void saveData() {
     }
     file.close();
 }
-// Helper: Don't edit—checks if roll is unique and not empty.
 bool isValidRollNumber(const std::string& roll) {
     for (const auto& s : students) {
         if (s.rollNumber == roll) return false;
@@ -112,10 +105,6 @@ void deleteStudent() {
     students.erase(students.begin() + i);
     std::cout << "Deleted!" << std::endl;
 }
-// ===== END MEMBER 2 =====
-// ===== MEMBER 3: DISPLAY/SEARCH & INTERFACE (View/Search/Sort + Menu) =====
-// Goal: Print tables nicely, search/filter, sort. Make menu user-friendly.
-// Use <iomanip> for tables: #include <iomanip> (already at top).
 void viewAll() {
     if (students.empty()) {
         std::cout << "No students yet." << std::endl;
@@ -193,10 +182,8 @@ void showMenu() {
     std::cout << "0. Exit" << std::endl;
     std::cout << "=========================" << std::endl;
 }
-// ===== END MEMBER 3 =====
-// ===== MAIN: Program Loop (Group Lead: Review/Tweak if Needed) =====
 int main() {
-    loadData();  // Start by loading saved data
+    loadData();  
     int choice;
     do {
         showMenu();
